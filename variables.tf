@@ -317,7 +317,7 @@ variable "container_stdin_open" {
 
 variable "container_storage_opts" {
   type        = map(string)
-  description = "(Optional) (Map of String) Key/value pairs for the storage driver options, e.g. size: 120G"
+  description = "(Optional) (Map of String) Key/value pairs for the storage driver options, e.g. size: 120G."
   default     = {}
 }
 
@@ -403,7 +403,7 @@ variable "container_read_only_network_data" {
 # DOCKER IMAGE
 # -----------------------------------------------------------------------------
 
-variable "create_docker_image" {
+variable "image_pull" {
   type        = bool
   description = "(Required) (Boolean) Pulls a Docker image to a given Docker host from a Docker Registry. This resource will not pull new layers of the image automatically unless used in conjunction with docker_registry_image data source to update the pull_triggers field."
   default     = false
@@ -415,7 +415,7 @@ variable "image_name" {
   default     = null
 }
 
-variable "image_build" {
+variable "build" {
   type        = list(any)
   description = "(Optional) (Block Set, Max: 1) Configuration to build an image. Please see docker build command reference too."
   default     = []
@@ -511,7 +511,7 @@ variable "network_ipam_config" {
 
 variable "network_ipam_driver" {
   type        = string
-  description = "(Optional) (String) Driver used by the custom IP scheme of the network. Defaults to default"
+  description = "(Optional) (String) Driver used by the custom IP scheme of the network. Defaults to default."
   default     = "default"
 }
 
@@ -543,18 +543,270 @@ variable "network_scope" {
 # DOCKER PLUGIN
 # -----------------------------------------------------------------------------
 
+variable "create_docker_plugin" {
+  type        = bool
+  description = "(Required) (Boolean) Manages the lifecycle of a Docker plugin."
+  default     = false
+}
+
+variable "plugin_name" {
+  type        = string
+  description = "(Required) (String) Docker Plugin name."
+  default     = null
+}
+
+variable "plugin_alias" {
+  type        = string
+  description = "(Optional) (String) Docker Plugin alias."
+  default     = null
+}
+
+variable "plugin_enable_timeout" {
+  type        = number
+  description = "(Optional) (Number) HTTP client timeout to enable the plugin."
+  default     = null
+}
+
+variable "plugin_enabled" {
+  type        = bool
+  description = "(Optional) (Boolean) If true the plugin is enabled. Defaults to true."
+  default     = true
+}
+
+variable "plugin_env" {
+  type        = set(string)
+  description = "(Optional) (Set of String) The environment variables in the form of KEY=VALUE, e.g. DEBUG=0."
+  default     = []
+}
+
+variable "plugin_force_destroy" {
+  type        = bool
+  description = "(Optional) (Boolean) If true, then the plugin is destroyed forcibly."
+  default     = false
+}
+
+variable "plugin_force_disable" {
+  type        = bool
+  description = "(Optional) (Boolean) If true, then the plugin is disabled forcibly."
+  default     = false
+}
+
+variable "plugin_grant_all_permissions" {
+  type        = bool
+  description = "(Optional) (Boolean) If true, grant all permissions necessary to run the plugin."
+  default     = false
+}
+
+variable "plugin_grant_permissions" {
+  type        = list(any)
+  description = "(Optional) (Block Set) Grant specific permissions only."
+  default     = []
+}
+
+variable "plugin_id" {
+  type        = string
+  description = "(Optional) (String) The ID of this resource."
+  default     = null
+}
+
+variable "plugin_plugin_reference" {
+  type        = string
+  description = "(Optional) (Read-Only) (String) Docker Plugin Reference"
+  default     = null
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER REGISTRY IMAGE
 # -----------------------------------------------------------------------------
+
+variable "create_registry_image" {
+  type        = bool
+  description = "(Required) (Boolean) Manages the lifecycle of docker image/tag in a registry means it can store one or more version of specific docker images and identified by their tags."
+  default     = false
+}
+
+variable "registry_image_name" {
+  type        = string
+  description = "(Required) (String) The name of the Docker image."
+  default     = null
+}
+
+variable "registry_image_build" {
+  type        = list(any)
+  description = "(Optional) (Block List, Max: 1) Definition for building the image."
+  default     = []
+}
+
+variable "registry_image_id" {
+  type        = string
+  description = "(Optional) (String) The ID of this resource."
+  default     = null
+}
+
+variable "registry_image_insecure_skip_verify" {
+  type        = bool
+  description = "(Optional) (Boolean) If true, the verification of TLS certificates of the server/registry is disabled. Defaults to false"
+  default     = false
+}
+
+variable "registry_image_keep_remotely" {
+  type        = bool
+  description = "(Optional) (Boolean) If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the docker registry on destroy operation. Defaults to false"
+  default     = false
+}
+
+variable "registry_image_sha256_digest" {
+  type        = string
+  description = "(Optional) (Read-Only) (String) The sha256 digest of the image."
+  default     = null
+}
 
 # -----------------------------------------------------------------------------
 # DOCKER SECRET
 # -----------------------------------------------------------------------------
 
+variable "create_docker_secret" {
+  type        = bool
+  description = "Manages the secrets of a Docker service in a swarm."
+  default     = false
+}
+
+variable "secret_data" {
+  type        = string
+  description = "(Required) (String, Sensitive) Base64-url-safe-encoded secret data."
+  default     = null
+}
+
+variable "secret_name" {
+  type        = string
+  description = "(Required) (String) User-defined name of the secret."
+  default     = null
+}
+
+variable "secret_id" {
+  type        = string
+  description = "(Optional) (String) The ID of this resource."
+  default     = null
+}
+
+variable "secret_labels" {
+  type        = list(any)
+  description = "(Optional) (Block Set) User-defined key/value metadata."
+  default     = []
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER SERVICE
 # -----------------------------------------------------------------------------
 
+variable "create_docker_service" {
+  type        = bool
+  description = "This resource manages the lifecycle of a Docker service. By default, the creation, update and delete of services are detached. With the Converge Config the behavior of the docker cli is imitated to guarantee tha for example, all tasks of a service are running or successfully updated or to inform terraform that a service could no be updated and was successfully rolled back."
+  default     = false
+}
+
+variable "service_name" {
+  type        = string
+  description = "(Required) (String) Name of the service."
+  default     = null
+}
+
+variable "service_task_spec" {
+  type        = list(any)
+  description = "(Required) (Block List, Min: 1, Max: 1) User modifiable task configuration."
+  default     = []
+}
+
+variable "service_auth" {
+  type        = list(any)
+  description = "(Optional) (Block List, Max: 1) Configuration for the authentication for pulling the images of the service."
+  default     = []
+}
+
+variable "service_converge_config" {
+  type        = list(any)
+  description = "(Optional) (Block List, Max: 1) A configuration to ensure that a service converges aka reaches the desired that of all task up and running."
+  default     = []
+}
+
+variable "service_endpoint_spec" {
+  type        = list(any)
+  description = "(Optional) (Block List, Max: 1) Properties that can be configured to access and load balance a service."
+  default     = []
+}
+
+variable "service_id" {
+  type        = string
+  description = "(Optional) (String) The ID of this resource."
+  default     = null
+}
+
+variable "service_labels" {
+  type        = list(any)
+  description = "(Optional) (Block Set) User-defined key/value metadata."
+  default     = []
+}
+
+variable "service_mode" {
+  type        = list(any)
+  description = "(Optional) (Block List, Max: 1) Scheduling mode for the service."
+  default     = null
+}
+
+variable "service_rollback_config" {
+  type        = list(any)
+  description = "(Optional) (Block List, Max: 1) Specification for the rollback strategy of the service."
+  default     = []
+}
+
+variable "service_update_config" {
+  type        = list(any)
+  description = "(Optional) (Block List, Max: 1) Specification for the update strategy of the service."
+  default     = []
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER VOLUME
 # -----------------------------------------------------------------------------
+
+variable "create_docker_volume" {
+  type        = bool
+  description = "Creates and destroys a volume in Docker. This can be used alongside docker_container to prepare volumes that can be shared across containers."
+  default     = false
+}
+
+ variable "volume_driver" {
+   type = string
+   description = "(Optional) (String) Driver type for the volume. Defaults to local."
+   default = "local"
+ }
+
+ variable "volume_driver_opts" {
+   type = map(string)
+   description = "(Optional) (Map of String) Options specific to the driver."
+   default = {}
+ }
+
+ variable "volume_id" {
+   type = string
+   description = "(Optional) (String) The ID of this resource."
+   default = null
+ }
+
+ variable "volume_labels" {
+   type = list(any)
+   description = "(Optional) (Block Set) User-defined key/value metadata."
+   default = []
+ }
+
+ variable "volume_name" {
+   type = string
+   description = "(Optional) (String) The name of the Docker volume (will be generated if not provided)."
+   default = null
+ }
+
+ variable "volume_mountpoint" {
+   type = string
+   description = "(Optional) (Read-Only) (String) The mountpoint of the volume."
+   default = null
+ }

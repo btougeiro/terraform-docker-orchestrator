@@ -6,34 +6,433 @@
 # DOCKER CONFIG
 # -----------------------------------------------------------------------------
 
+resource "docker_config" "this" {
+  count = var.create_docker_config ? 1 : 0
+
+  name = var.config_name
+  data = var.config_data
+
+  lifecycle {
+    ignore_changes        = ["name"]
+    create_before_destroy = true
+  }
+
+  id = var.config_id
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER CONTAINER
 # -----------------------------------------------------------------------------
+
+resource "docker_container" "this" {
+  count = var.create_docker_container ? 1 : 0
+
+  name  = var.container_name
+  image = var.container_image
+
+  attach = var.container_attach
+
+  dynamic "capabilities" {
+    for_each = var.container_capabilities
+    content {
+      add  = lookup(capabilities.value, "add", [])
+      drop = lookup(capabilities.value, "drop", [])
+    }
+  }
+
+  command               = var.container_command
+  cpu_set               = var.container_cpu_set
+  cpu_shares            = var.container_cpu_shares
+  destroy_grace_seconds = var.container_destroy_grace_seconds
+
+  dynamic "devices" {
+    for_each = var.container_devices
+    content {
+      host_path      = lookup(devices.value, "host_path", null)
+      container_path = lookup(devices.value, "container_path", null)
+      permissions    = lookup(devices.value, "permissions", "rwm")
+    }
+  }
+
+  dns        = var.container_dns
+  dns_opts   = var.container_dns_opts
+  dns_search = var.container_dns_search
+  domainname = var.container_domainname
+  entrypoint = var.container_entrypoint
+  env        = var.container_env
+  group_add  = var.container_group_add
+
+  dynamic "healthcheck" {
+    for_each = var.container_healthcheck
+    content {
+      test         = lookup(healthcheck.value, "test", null)
+      interval     = lookup(healthcheck.value, "interval", "0s")
+      retries      = lookup(healthcheck.value, "retries", 0)
+      start_period = lookup(healthcheck.value, "start_period", "0s")
+      timeout      = lookup(healthcheck.value, "timeout", "0s")
+    }
+  }
+
+  dynamic "host" {
+    for_each = var.container_host
+    content {
+      host = lookup(host.value, "host", null)
+      ip   = lookup(host.value, "ip", null)
+    }
+  }
+
+  hostname = var.container_hostname
+  id       = var.container_id
+  init     = var.container_init
+  ipc_mode = var.container_ipc_mode
+
+  dynamic "labels" {
+    for_each = var.container_labels
+    content {
+      label = lookup(labels.value, "label", null)
+      value = lookup(labels.value, "value", null)
+    }
+  }
+
+  log_driver      = var.container_log_driver
+  log_opts        = var.container_log_opts
+  logs            = var.container_logs
+  max_retry_count = var.container_max_retry_count
+  memory          = var.container_memory
+  memory_swap     = var.container_memory_swap
+
+  dynamic "mounts" {
+    for_each = var.container_mounts
+    content {
+      target = lookup(mounts.value, "target", null)
+      type   = lookup(mounts.value, "type", null)
+
+      dynamic "bind_options" {
+        for_each = lookup(mounts.value, "bind_options", [])
+        content {
+          propagation = lookup(bind_options.value, "propagation", null)
+        }
+      }
+
+      read_only = lookup(mounts.value, "read_only", null)
+      source    = lookup(mounts.value, "source", null)
+
+      dynamic "tmpfs_options" {
+        for_each = lookup(mounts.value, "tmpfs_options", [])
+        content {
+          mode       = lookup(tmpfs_options.value, "mode", null)
+          size_bytes = lookup(tmpfs_options.value, "size_bytes", null)
+        }
+      }
+
+      dynamic "volume_options" {
+        for_each = lookup(mounts.value, "volume_options", [])
+        content {
+          driver_name    = lookup(volume_options.value, "driver_name", null)
+          driver_options = lookup(volume_options.value, "driver_options", null)
+          dynamic "labels" {
+            for_each = lookup(volume_options.value, "labels", [])
+            content {
+              label = lookup(labels.value, "label", null)
+              value = lookup(labels.value, "value", null)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  must_run     = var.container_must_run
+  network_mode = var.container_network_mode
+
+  dynamic "networks_advanced" {
+    for_each = var.container_networks_advanced
+    content {
+      name         = lookup(networks_advanced.value, "name", null)
+      aliases      = lookup(networks_advanced.value, "aliases", null)
+      ipv4_address = lookup(networks_advanced.value, "ipv4_address", null)
+      ipv6_address = lookup(networks_advanced.value, "ipv6_address", null)
+    }
+  }
+
+  pid_mode = var.container_pid_mode
+
+  dynamic "ports" {
+    for_each = var.container_ports
+    content {
+      internal = lookup(ports.value, "internal", null)
+      external = lookup(ports.value, "external", null)
+      ip       = lookup(ports.value, "ip", null)
+      protocol = lookup(ports.value, "protocol", null)
+    }
+  }
+
+  privileged        = var.container_privileged
+  publish_all_ports = var.container_publish_all_ports
+  read_only         = var.container_read_only
+  remove_volumes    = var.container_remove_volumes
+  restart           = var.container_restart
+  rm                = var.container_rm
+  security_opts     = var.container_security_opts
+  shm_size          = var.container_shm_size
+  start             = var.container_start
+  stdin_open        = var.container_stdin_open
+  storage_opts      = var.container_storage_opts
+  sysctls           = var.container_sysctls
+  tmpfs             = var.container_tmpfs
+  tty               = var.container_tty
+
+  dynamic "ulimit" {
+    for_each = var.container_ulimit
+    content {
+      name = lookup(ulimit.value, "name", null)
+      hard = lookup(ulimit.value, "hard", null)
+      soft = lookup(ulimit.value, "soft", null)
+    }
+  }
+
+  dynamic "upload" {
+    for_each = var.container_upload
+    content {
+      file           = lookup(upload.value, "file", null)
+      content        = lookup(upload.value, "content", null)
+      content_base64 = lookup(upload.value, "content_base64", null)
+      executable     = lookup(upload.value, "executable", null)
+      source         = lookup(upload.value, "source", null)
+      source_hash    = lookup(upload.value, "source_hash", null)
+    }
+  }
+
+  user        = var.container_user
+  userns_mode = var.container_userns_mode
+
+  dynamic "volumes" {
+    for_each = var.container_volumes
+    content {
+      container_path = lookup(volumes.value, "container_path", null)
+      from_container = lookup(volumes.value, "from_container", null)
+      host_path      = lookup(volumes.value, "host_path", null)
+      read_only      = lookup(volumes.value, "read_only", null)
+      volume_name    = lookup(volumes.value, "volume_name", null)
+    }
+  }
+
+  working_dir = var.container_working_dir
+}
 
 # -----------------------------------------------------------------------------
 # DOCKER IMAGE
 # -----------------------------------------------------------------------------
 
+resource "docker_image" "this" {
+  count = var.image_pull ? 1 : 0
+
+  name          = var.image_name
+  force_remove  = var.image_force_remove
+  id            = var.image_id
+  keep_locally  = var.image_keep_locally
+  pull_triggers = length(var.build) > 0 ? [] : var.image_pull_triggers
+
+  //noinspection ConflictingProperties
+  dynamic "build" {
+    for_each = var.build
+    content {
+      path         = lookup(build.value, "path", null)
+      build_arg    = lookup(build.value, "build_arg", {})
+      dockerfile   = lookup(build.value, "dockerfile", "Dockerfile")
+      force_remove = lookup(build.value, "force_remove", true)
+      label        = lookup(build.value, "label", {})
+      no_cache     = lookup(build.value, "no_cache", false)
+      remove       = lookup(build.value, "remove", true)
+      tag          = lookup(build.value, "tag", [])
+      target       = lookup(build.value, "target", null)
+    }
+  }
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER NETWORK
 # -----------------------------------------------------------------------------
+
+resource "docker_network" "this" {
+  count = var.create_docker_network ? 1 : 0
+
+  name       = var.network_name
+  attachable = var.network_attachable
+  driver     = var.network_driver
+  id         = var.network_id
+  ingress    = var.network_ingress
+  internal   = var.network_internal
+
+  dynamic "ipam_config" {
+    for_each = var.network_ipam_config
+    content {
+      aux_address = lookup(ipam_config.value, "aux_address", null)
+      gateway     = lookup(ipam_config.value, "gateway", null)
+      ip_range    = lookup(ipam_config.value, "ip_range", null)
+      subnet      = lookup(ipam_config.value, "subnet", null)
+    }
+  }
+
+  ipam_driver = var.network_ipam_driver
+  ipv6        = var.network_ipv6
+
+  dynamic "labels" {
+    for_each = var.network_labels
+    content {
+      label = lookup(labels.value, "label", null)
+      value = lookup(labels.value, "value", null)
+    }
+  }
+
+  options = var.network_options
+}
 
 # -----------------------------------------------------------------------------
 # DOCKER PLUGIN
 # -----------------------------------------------------------------------------
 
+//noinspection ConflictingProperties
+resource "docker_plugin" "this" {
+  count = var.create_docker_plugin ? 1 : 0
+
+  name                  = var.plugin_name
+  alias                 = var.plugin_alias
+  enabled               = var.plugin_enabled
+  env                   = var.plugin_env
+  force_destroy         = var.plugin_force_destroy
+  force_disable         = var.plugin_force_disable
+  grant_all_permissions = length(var.plugin_grant_permissions) > 0 ? [] : var.plugin_grant_all_permissions
+
+  //noinspection ConflictingProperties
+  dynamic "grant_permissions" {
+    for_each = var.plugin_grant_permissions
+    content {
+      name  = lookup(grant_permissions.value, "name", null)
+      value = lookup(grant_permissions.value, "value", null)
+    }
+  }
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER REGISTRY IMAGE
 # -----------------------------------------------------------------------------
+
+resource "docker_registry_image" "this" {
+  count = var.create_registry_image ? 1 : 0
+
+  name = var.registry_image_name
+
+  dynamic "build" {
+    for_each = var.registry_image_build
+    content {
+      context = lookup(build.value, "context", null)
+      dynamic "auth_config" {
+        for_each = lookup(build.value, "auth_config", [])
+        content {
+          host_name      = lookup(auth_config.value, "host_name", null)
+          auth           = lookup(auth_config.value, "auth", null)
+          email          = lookup(auth_config.value, "email", null)
+          identity_token = lookup(auth_config.value, "identity_token", null)
+          password       = lookup(auth_config.value, "password", null)
+          registry_token = lookup(auth_config.value, "registry_token", null)
+          server_address = lookup(auth_config.value, "server_address", null)
+          user_name      = lookup(auth_config.value, "user_name", null)
+        }
+      }
+      build_args      = lookup(build.value, "build_args", {})
+      build_id        = lookup(build.value, "build_id", "")
+      cache_from      = lookup(build.value, "cache_from", [])
+      cgroup_parent   = lookup(build.value, "cgroup_parent", "")
+      cpu_period      = lookup(build.value, "cpu_period", null)
+      cpu_quota       = lookup(build.value, "cpu_quota", null)
+      cpu_set_cpus    = lookup(build.value, "cpu_set_cpus", null)
+      cpu_set_mems    = lookup(build.value, "cpu_set_mems", null)
+      dockerfile      = lookup(build.value, "dockerfile", "Dockerfile")
+      extra_hosts     = lookup(build.value, "extra_hosts", [])
+      force_remove    = lookup(build.value, "force_remove", true)
+      isolation       = lookup(build.value, "isolation", null)
+      labels          = lookup(build.value, "labels", {})
+      memory          = lookup(build.value, "memory", 0)
+      memory_swap     = lookup(build.value, "memory_swap", 0)
+      network_mode    = lookup(build.value, "network_mode", null)
+      no_cache        = lookup(build.value, "no_cache", false)
+      platform        = lookup(build.value, "platform", null)
+      pull_parent     = lookup(build.value, "pull_parent", false)
+      remote_context  = lookup(build.value, "remote_context", null)
+      remove          = lookup(build.value, "remove", true)
+      security_opt    = lookup(build.value, "security_opt", [])
+      session_id      = lookup(build.value, "session_id", null)
+      shm_size        = lookup(build.value, "shm_size", null)
+      squash          = lookup(build.value, "squash", false)
+      suppress_output = lookup(build.value, "suppress_output", true)
+      target          = lookup(build.value, "target", null)
+      dynamic "ulimit" {
+        for_each = lookup(build.value, "ulimit", [])
+        content {
+          hard = lookup(ulimit.value, "hard", 0)
+          name = lookup(ulimit.value, "name", null)
+          soft = lookup(ulimit.value, "soft", 0)
+        }
+      }
+      version = lookup(build.value, "version", null)
+    }
+  }
+}
 
 # -----------------------------------------------------------------------------
 # DOCKER SECRET
 # -----------------------------------------------------------------------------
 
+resource "docker_secret" "this" {
+  count = var.create_docker_secret && var.create_docker_service ? 1 : 0
+
+  data = var.secret_data
+  name = var.secret_name
+  id   = var.secret_id
+
+  dynamic "labels" {
+    for_each = var.secret_labels
+    content {
+      label = lookup(labels.value, "label", null)
+      value = lookup(labels.value, "value", null)
+    }
+  }
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER SERVICE
 # -----------------------------------------------------------------------------
 
+resource "docker_service" "this" {
+  count = var.create_docker_service ? 1 : 0
+
+  name = var.service_name
+  task_spec {
+    container_spec {
+      image = ""
+    }
+  }
+}
+
 # -----------------------------------------------------------------------------
 # DOCKER VOLUME
 # -----------------------------------------------------------------------------
+
+resource "docker_volume" "this" {
+  count = var.create_docker_volume ? 1 : 0
+
+  driver      = var.volume_driver
+  driver_opts = var.volume_driver_opts
+  id          = var.volume_id
+
+  dynamic "labels" {
+    for_each = var.volume_labels
+    content {
+      label = lookup(labels.value, "label", null)
+      value = lookup(labels.value, "value", null)
+    }
+  }
+
+  name = var.volume_name
+}
