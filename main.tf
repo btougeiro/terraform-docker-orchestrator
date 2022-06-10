@@ -408,9 +408,161 @@ resource "docker_service" "this" {
   count = var.create_docker_service ? 1 : 0
 
   name = var.service_name
-  task_spec {
-    container_spec {
-      image = ""
+  dynamic "task_spec" {
+    for_each = var.service_task_spec
+    content {
+      dynamic "container_spec" {
+        for_each = lookup(task_spec.value, "container_spec", [])
+        content {
+          image   = lookup(container_spec.value, "image", null)
+          args    = lookup(container_spec.value, "args", [])
+          command = lookup(container_spec.value, "command", [])
+          dynamic "configs" {
+            for_each = lookup(container_spec.value, "configs", [])
+            content {
+              config_id   = lookup(configs.value, "config_id", null)
+              file_name   = lookup(configs.value, "file_name", null)
+              config_name = lookup(configs.value, "config_name", null)
+              file_gid    = lookup(configs.value, "file_gid", null)
+              file_mode   = lookup(configs.value, "file_mode", null)
+              file_uid    = lookup(configs.value, "file_uid", null)
+            }
+          }
+        }
+      }
+      force_update = lookup(task_spec.value, "force_update", null)
+      dynamic "log_driver" {
+        for_each = lookup(task_spec.value, "log_driver", [])
+        content {
+          name    = lookup(log_driver.value, "name", null)
+          options = lookup(log_driver.value, "options", {})
+        }
+      }
+      networks = lookup(task_spec.value, "networks", [])
+      dynamic "placement" {
+        for_each = lookup(task_spec.value, "placement", [])
+        content {
+          constraints  = lookup(placement.value, "constraints", [])
+          max_replicas = lookup(placement.value, "max_replicas", null)
+          dynamic "platforms" {
+            for_each = lookup(placement.value, "platforms", [])
+            content {
+              architecture = lookup(platforms.value, "architecture", null)
+              os           = lookup(platforms.value, "os", null)
+            }
+          }
+          prefs = lookup(placement.value, "prefs", [])
+        }
+      }
+      dynamic "resources" {
+        for_each = lookup(task_spec.value, "resources", [])
+        content {
+          dynamic "limits" {
+            for_each = lookup(resources.value, "limits", [])
+            content {
+              memory_bytes = lookup(limits.value, "memory_bytes", null)
+              nano_cpus    = lookup(limits.value, "nano_cpus", null)
+            }
+          }
+          dynamic "reservation" {
+            for_each = lookup(resources.value, "reservation", [])
+            content {
+              dynamic "generic_resources" {
+                for_each = lookup(reservation.value, "generic_resources", [])
+                content {
+                  discrete_resources_spec = lookup(generic_resources.value, "discrete_resources_spec", [])
+                  named_resources_spec    = lookup(generic_resources.value, "named_resources_spec", [])
+                }
+              }
+              memory_bytes = lookup(reservation.value, "memory_bytes", null)
+              nano_cpus    = lookup(reservation.value, "nano_cpus", null)
+            }
+          }
+        }
+      }
+      dynamic "restart_policy" {
+        for_each = lookup(task_spec.value, "restart_policy", [])
+        content {
+          condition    = lookup(restart_policy.value, "condition", null)
+          delay        = lookup(restart_policy.value, "delay", null)
+          max_attempts = lookup(restart_policy.value, "max_attempts", null)
+          window       = lookup(restart_policy.value, "window", null)
+        }
+      }
+      runtime = lookup(task_spec.value, "runtime", null)
+    }
+  }
+  dynamic "auth" {
+    for_each = var.service_auth
+    content {
+      server_address = lookup(auth.value, "server_address", null)
+      password       = lookup(auth.value, "password", null)
+      username       = lookup(auth.value, "username", null)
+    }
+  }
+  dynamic "converge_config" {
+    for_each = var.service_converge_config
+    content {
+      delay   = lookup(converge_config.value, "delay", null)
+      timeout = lookup(converge_config.value, "timeout", null)
+    }
+  }
+  dynamic "endpoint_spec" {
+    for_each = var.service_endpoint_spec
+    content {
+      mode = lookup(endpoint_spec.value, "mode", null)
+      dynamic "ports" {
+        for_each = lookup(endpoint_spec.value, "ports", [])
+        content {
+          target_port    = lookup(ports.value, "target_port", null)
+          name           = lookup(ports.value, "name", null)
+          protocol       = lookup(ports.value, "protocol", "tcp")
+          publish_mode   = lookup(ports.value, "publish_mode", "ingress")
+          published_port = lookup(ports.value, "publish_mode", null)
+        }
+      }
+    }
+  }
+  id = var.service_id
+  dynamic "labels" {
+    for_each = var.service_labels
+    content {
+      label = lookup(labels.value, "label", null)
+      value = lookup(labels.value, "value", null)
+    }
+  }
+  dynamic "mode" {
+    for_each = var.service_mode
+    content {
+      global = lookup(mode.value, "global", null)
+      dynamic "replicated" {
+        for_each = lookup(mode.value, "replicated", [])
+        content {
+          replicas = lookup(replicated.value, "replicas", 1)
+        }
+      }
+    }
+  }
+  dynamic "rollback_config" {
+    for_each = var.service_rollback_config
+    content {
+      delay             = lookup(rollback_config.value, "delay", "0s")
+      failure_action    = lookup(rollback_config.value, "failure_action", "pause")
+      max_failure_ratio = lookup(rollback_config.value, "max_failure_ratio", "0.0")
+      monitor           = lookup(rollback_config.value, "monitor", "5s")
+      order             = lookup(rollback_config.value, "order", "stop-first")
+      parallelism       = lookup(rollback_config.value, "parallelism", 1)
+    }
+  }
+  dynamic "update_config" {
+    for_each = var.service_update_config
+    content {
+      delay             = lookup(update_config.value, "delay", "0s")
+      failure_action    = lookup(update_config.value, "failure_action", "pause")
+      max_failure_ratio = lookup(update_config.value, "max_failure_ratio", "0.0")
+      monitor           = lookup(update_config.value, "monitor", "5s")
+      order             = lookup(update_config.value, "order", "stop-first")
+      parallelism       = lookup(update_config.value, "parallelism", 1)
     }
   }
 }
