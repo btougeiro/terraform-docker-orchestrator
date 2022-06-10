@@ -8,15 +8,12 @@
 
 resource "docker_config" "this" {
   count = var.create_docker_config ? 1 : 0
-
-  name = var.config_name
   data = var.config_data
-
+  name = var.config_name
   lifecycle {
     ignore_changes        = ["name"]
     create_before_destroy = true
   }
-
   id = var.config_id
 }
 
@@ -25,13 +22,10 @@ resource "docker_config" "this" {
 # -----------------------------------------------------------------------------
 
 resource "docker_container" "this" {
-  count = var.create_docker_container ? 1 : 0
-
-  name  = var.container_name
-  image = var.container_image
-
+  count  = var.create_docker_container ? 1 : 0
+  image  = var.container_image
+  name   = var.container_name
   attach = var.container_attach
-
   dynamic "capabilities" {
     for_each = var.container_capabilities
     content {
@@ -39,12 +33,10 @@ resource "docker_container" "this" {
       drop = lookup(capabilities.value, "drop", [])
     }
   }
-
   command               = var.container_command
   cpu_set               = var.container_cpu_set
   cpu_shares            = var.container_cpu_shares
   destroy_grace_seconds = var.container_destroy_grace_seconds
-
   dynamic "devices" {
     for_each = var.container_devices
     content {
@@ -53,7 +45,6 @@ resource "docker_container" "this" {
       permissions    = lookup(devices.value, "permissions", "rwm")
     }
   }
-
   dns        = var.container_dns
   dns_opts   = var.container_dns_opts
   dns_search = var.container_dns_search
@@ -61,7 +52,6 @@ resource "docker_container" "this" {
   entrypoint = var.container_entrypoint
   env        = var.container_env
   group_add  = var.container_group_add
-
   dynamic "healthcheck" {
     for_each = var.container_healthcheck
     content {
@@ -72,7 +62,6 @@ resource "docker_container" "this" {
       timeout      = lookup(healthcheck.value, "timeout", "0s")
     }
   }
-
   dynamic "host" {
     for_each = var.container_host
     content {
@@ -80,12 +69,10 @@ resource "docker_container" "this" {
       ip   = lookup(host.value, "ip", null)
     }
   }
-
   hostname = var.container_hostname
   id       = var.container_id
   init     = var.container_init
   ipc_mode = var.container_ipc_mode
-
   dynamic "labels" {
     for_each = var.container_labels
     content {
@@ -93,30 +80,25 @@ resource "docker_container" "this" {
       value = lookup(labels.value, "value", null)
     }
   }
-
   log_driver      = var.container_log_driver
   log_opts        = var.container_log_opts
   logs            = var.container_logs
   max_retry_count = var.container_max_retry_count
   memory          = var.container_memory
   memory_swap     = var.container_memory_swap
-
   dynamic "mounts" {
     for_each = var.container_mounts
     content {
       target = lookup(mounts.value, "target", null)
       type   = lookup(mounts.value, "type", null)
-
       dynamic "bind_options" {
         for_each = lookup(mounts.value, "bind_options", [])
         content {
           propagation = lookup(bind_options.value, "propagation", null)
         }
       }
-
       read_only = lookup(mounts.value, "read_only", null)
       source    = lookup(mounts.value, "source", null)
-
       dynamic "tmpfs_options" {
         for_each = lookup(mounts.value, "tmpfs_options", [])
         content {
@@ -124,7 +106,6 @@ resource "docker_container" "this" {
           size_bytes = lookup(tmpfs_options.value, "size_bytes", null)
         }
       }
-
       dynamic "volume_options" {
         for_each = lookup(mounts.value, "volume_options", [])
         content {
@@ -141,10 +122,8 @@ resource "docker_container" "this" {
       }
     }
   }
-
   must_run     = var.container_must_run
   network_mode = var.container_network_mode
-
   dynamic "networks_advanced" {
     for_each = var.container_networks_advanced
     content {
@@ -154,9 +133,7 @@ resource "docker_container" "this" {
       ipv6_address = lookup(networks_advanced.value, "ipv6_address", null)
     }
   }
-
   pid_mode = var.container_pid_mode
-
   dynamic "ports" {
     for_each = var.container_ports
     content {
@@ -166,7 +143,6 @@ resource "docker_container" "this" {
       protocol = lookup(ports.value, "protocol", null)
     }
   }
-
   privileged        = var.container_privileged
   publish_all_ports = var.container_publish_all_ports
   read_only         = var.container_read_only
@@ -181,7 +157,6 @@ resource "docker_container" "this" {
   sysctls           = var.container_sysctls
   tmpfs             = var.container_tmpfs
   tty               = var.container_tty
-
   dynamic "ulimit" {
     for_each = var.container_ulimit
     content {
@@ -190,7 +165,6 @@ resource "docker_container" "this" {
       soft = lookup(ulimit.value, "soft", null)
     }
   }
-
   dynamic "upload" {
     for_each = var.container_upload
     content {
@@ -202,10 +176,8 @@ resource "docker_container" "this" {
       source_hash    = lookup(upload.value, "source_hash", null)
     }
   }
-
   user        = var.container_user
   userns_mode = var.container_userns_mode
-
   dynamic "volumes" {
     for_each = var.container_volumes
     content {
@@ -216,7 +188,6 @@ resource "docker_container" "this" {
       volume_name    = lookup(volumes.value, "volume_name", null)
     }
   }
-
   working_dir = var.container_working_dir
 }
 
@@ -226,13 +197,7 @@ resource "docker_container" "this" {
 
 resource "docker_image" "this" {
   count = var.image_pull ? 1 : 0
-
-  name          = var.image_name
-  force_remove  = var.image_force_remove
-  id            = var.image_id
-  keep_locally  = var.image_keep_locally
-  pull_triggers = length(var.build) > 0 ? [] : var.image_pull_triggers
-
+  name  = var.image_name
   //noinspection ConflictingProperties
   dynamic "build" {
     for_each = var.build
@@ -248,6 +213,10 @@ resource "docker_image" "this" {
       target       = lookup(build.value, "target", null)
     }
   }
+  force_remove  = var.image_force_remove
+  id            = var.image_id
+  keep_locally  = var.image_keep_locally
+  pull_triggers = length(var.build) > 0 ? [] : var.image_pull_triggers
 }
 
 # -----------------------------------------------------------------------------
@@ -255,15 +224,14 @@ resource "docker_image" "this" {
 # -----------------------------------------------------------------------------
 
 resource "docker_network" "this" {
-  count = var.create_docker_network ? 1 : 0
-
-  name       = var.network_name
-  attachable = var.network_attachable
-  driver     = var.network_driver
-  id         = var.network_id
-  ingress    = var.network_ingress
-  internal   = var.network_internal
-
+  count           = var.create_docker_network ? 1 : 0
+  name            = var.network_name
+  attachable      = var.network_attachable
+  check_duplicate = var.network_check_duplicate
+  driver          = var.network_driver
+  id              = var.network_id
+  ingress         = var.network_ingress
+  internal        = var.network_internal
   dynamic "ipam_config" {
     for_each = var.network_ipam_config
     content {
@@ -273,10 +241,8 @@ resource "docker_network" "this" {
       subnet      = lookup(ipam_config.value, "subnet", null)
     }
   }
-
   ipam_driver = var.network_ipam_driver
   ipv6        = var.network_ipv6
-
   dynamic "labels" {
     for_each = var.network_labels
     content {
@@ -284,7 +250,6 @@ resource "docker_network" "this" {
       value = lookup(labels.value, "value", null)
     }
   }
-
   options = var.network_options
 }
 
@@ -294,16 +259,15 @@ resource "docker_network" "this" {
 
 //noinspection ConflictingProperties
 resource "docker_plugin" "this" {
-  count = var.create_docker_plugin ? 1 : 0
-
+  count                 = var.create_docker_plugin ? 1 : 0
   name                  = var.plugin_name
   alias                 = var.plugin_alias
+  enable_timeout        = var.plugin_enable_timeout
   enabled               = var.plugin_enabled
   env                   = var.plugin_env
   force_destroy         = var.plugin_force_destroy
   force_disable         = var.plugin_force_disable
   grant_all_permissions = length(var.plugin_grant_permissions) > 0 ? [] : var.plugin_grant_all_permissions
-
   //noinspection ConflictingProperties
   dynamic "grant_permissions" {
     for_each = var.plugin_grant_permissions
@@ -312,6 +276,7 @@ resource "docker_plugin" "this" {
       value = lookup(grant_permissions.value, "value", null)
     }
   }
+  id = var.plugin_id
 }
 
 # -----------------------------------------------------------------------------
@@ -320,9 +285,7 @@ resource "docker_plugin" "this" {
 
 resource "docker_registry_image" "this" {
   count = var.create_registry_image ? 1 : 0
-
-  name = var.registry_image_name
-
+  name  = var.registry_image_name
   dynamic "build" {
     for_each = var.registry_image_build
     content {
@@ -378,6 +341,9 @@ resource "docker_registry_image" "this" {
       version = lookup(build.value, "version", null)
     }
   }
+  id                   = var.registry_image_id
+  insecure_skip_verify = var.registry_image_insecure_skip_verify
+  keep_remotely        = var.registry_image_keep_remotely
 }
 
 # -----------------------------------------------------------------------------
@@ -386,11 +352,9 @@ resource "docker_registry_image" "this" {
 
 resource "docker_secret" "this" {
   count = var.create_docker_secret && var.create_docker_service ? 1 : 0
-
-  data = var.secret_data
-  name = var.secret_name
-  id   = var.secret_id
-
+  data  = var.secret_data
+  name  = var.secret_name
+  id    = var.secret_id
   dynamic "labels" {
     for_each = var.secret_labels
     content {
@@ -406,8 +370,7 @@ resource "docker_secret" "this" {
 
 resource "docker_service" "this" {
   count = var.create_docker_service ? 1 : 0
-
-  name = var.service_name
+  name  = var.service_name
   dynamic "task_spec" {
     for_each = var.service_task_spec
     content {
@@ -572,12 +535,10 @@ resource "docker_service" "this" {
 # -----------------------------------------------------------------------------
 
 resource "docker_volume" "this" {
-  count = var.create_docker_volume ? 1 : 0
-
+  count       = var.create_docker_volume ? 1 : 0
   driver      = var.volume_driver
   driver_opts = var.volume_driver_opts
   id          = var.volume_id
-
   dynamic "labels" {
     for_each = var.volume_labels
     content {
@@ -585,6 +546,5 @@ resource "docker_volume" "this" {
       value = lookup(labels.value, "value", null)
     }
   }
-
   name = var.volume_name
 }
