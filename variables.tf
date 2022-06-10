@@ -375,30 +375,6 @@ variable "container_working_dir" {
   default     = null
 }
 
-variable "container_read_only_bridge" {
-  type        = string
-  description = "(Optional) (Read-Only) (String) The network bridge of the container as read from its NetworkSettings."
-  default     = null
-}
-
-variable "container_read_only_container_logs" {
-  type        = string
-  description = "(Optional) (Read-Only) (String) The logs of the container if its execution is done (container_attach must be disabled)."
-  default     = null
-}
-
-variable "container_read_only_exit_code" {
-  type        = number
-  description = "(Optional) (Read-Only) (Number) The exit code of the container if its execution is done (container_must_run must be disabled)."
-  default     = null
-}
-
-variable "container_read_only_network_data" {
-  type        = list(any)
-  description = "(Optional) (Read-Only) (List of Object) The data of the networks the container is connected to."
-  default     = []
-}
-
 # -----------------------------------------------------------------------------
 # DOCKER IMAGE
 # -----------------------------------------------------------------------------
@@ -443,12 +419,6 @@ variable "image_pull_triggers" {
   type        = set(string)
   description = "(Optional) (Set of String) List of values which cause an image pull when changed. This is used to store the image digest from the registry when using the docker_registry_image."
   default     = []
-}
-
-variable "image_repo_digest" {
-  type        = string
-  description = "(Optional) (Read-Only) (String) The image sha256 digest in the form of repo[:tag]@sha256:<hash>."
-  default     = null
 }
 
 # -----------------------------------------------------------------------------
@@ -533,12 +503,6 @@ variable "network_options" {
   default     = {}
 }
 
-variable "network_scope" {
-  type        = string
-  description = "(Optional) (Read-Only) (String) Scope of the network. One of swarm, global, or local."
-  default     = null
-}
-
 # -----------------------------------------------------------------------------
 # DOCKER PLUGIN
 # -----------------------------------------------------------------------------
@@ -609,12 +573,6 @@ variable "plugin_id" {
   default     = null
 }
 
-variable "plugin_plugin_reference" {
-  type        = string
-  description = "(Optional) (Read-Only) (String) Docker Plugin Reference"
-  default     = null
-}
-
 # -----------------------------------------------------------------------------
 # DOCKER REGISTRY IMAGE
 # -----------------------------------------------------------------------------
@@ -653,12 +611,6 @@ variable "registry_image_keep_remotely" {
   type        = bool
   description = "(Optional) (Boolean) If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the docker registry on destroy operation. Defaults to false"
   default     = false
-}
-
-variable "registry_image_sha256_digest" {
-  type        = string
-  description = "(Optional) (Read-Only) (String) The sha256 digest of the image."
-  default     = null
 }
 
 # -----------------------------------------------------------------------------
@@ -802,11 +754,5 @@ variable "create_docker_volume" {
  variable "volume_name" {
    type = string
    description = "(Optional) (String) The name of the Docker volume (will be generated if not provided)."
-   default = null
- }
-
- variable "volume_mountpoint" {
-   type = string
-   description = "(Optional) (Read-Only) (String) The mountpoint of the volume."
    default = null
  }
