@@ -14,13 +14,13 @@ variable "create_docker_config" {
 
 variable "config_name" {
   type        = string
-  description = "(Required) (String) Base64-url-safe-encoded config data."
+  description = "(Required) (String) User-defined name of the config."
   default     = null
 }
 
 variable "config_data" {
   type        = string
-  description = "(Required) (String) User-defined name of the config."
+  description = "(Required) (String) Base64-url-safe-encoded config data."
   default     = null
 }
 

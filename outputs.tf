@@ -8,6 +8,7 @@
 
 output "docker_config_name" {
   value = docker_config.this.name
+  description = "User-defined name of the config."
 }
 
 output "docker_config_id" {
