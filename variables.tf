@@ -619,7 +619,7 @@ variable "registry_image_keep_remotely" {
 
 variable "create_docker_secret" {
   type        = bool
-  description = "Manages the secrets of a Docker service in a swarm."
+  description = "(Required) (Boolean) Manages the secrets of a Docker service in a swarm."
   default     = false
 }
 
@@ -653,7 +653,7 @@ variable "secret_labels" {
 
 variable "create_docker_service" {
   type        = bool
-  description = "This resource manages the lifecycle of a Docker service. By default, the creation, update and delete of services are detached. With the Converge Config the behavior of the docker cli is imitated to guarantee tha for example, all tasks of a service are running or successfully updated or to inform terraform that a service could no be updated and was successfully rolled back."
+  description = "(Required) (Boolean) This resource manages the lifecycle of a Docker service. By default, the creation, update and delete of services are detached. With the Converge Config the behavior of the docker cli is imitated to guarantee tha for example, all tasks of a service are running or successfully updated or to inform terraform that a service could no be updated and was successfully rolled back."
   default     = false
 }
 
@@ -723,7 +723,7 @@ variable "service_update_config" {
 
 variable "create_docker_volume" {
   type        = bool
-  description = "Creates and destroys a volume in Docker. This can be used alongside docker_container to prepare volumes that can be shared across containers."
+  description = "(Required) (Boolean) Creates and destroys a volume in Docker. This can be used alongside docker_container to prepare volumes that can be shared across containers."
   default     = false
 }
 
