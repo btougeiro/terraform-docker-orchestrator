@@ -7,12 +7,12 @@
 # -----------------------------------------------------------------------------
 
 output "config_name" {
-  value = docker_config.this.name
+  value       = var.create_docker_config ? docker_config.this[0].name : null
   description = "User-defined name of the config."
 }
 
 output "config_id" {
-  value = docker_config.this.id
+  value       = var.create_docker_config ? docker_config.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -21,12 +21,12 @@ output "config_id" {
 # -----------------------------------------------------------------------------
 
 output "container_name" {
-  value = docker_container.this.name
+  value       = var.create_docker_container ? docker_container.this[0].name : null
   description = "The name of the container."
 }
 
 output "container_id" {
-  value = docker_container.this.id
+  value       = var.create_docker_container ? docker_container.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -35,12 +35,12 @@ output "container_id" {
 # -----------------------------------------------------------------------------
 
 output "image_name" {
-  value = docker_image.this.name
+  value       = var.image_pull ? docker_image.this[0].name : null
   description = "The name of the Docker image, including any tags or SHA256 repo digests."
 }
 
 output "image_id" {
-  value = docker_image.this.id
+  value       = var.image_pull ? docker_image.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -49,12 +49,12 @@ output "image_id" {
 # -----------------------------------------------------------------------------
 
 output "network_name" {
-  value = docker_network.this.name
+  value       = var.create_docker_network ? docker_network.this[0].name : null
   description = "The name of the Docker network."
 }
 
 output "network_id" {
-  value = docker_network.this.id
+  value       = var.create_docker_network ? docker_network.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -63,12 +63,12 @@ output "network_id" {
 # -----------------------------------------------------------------------------
 
 output "plugin_name" {
-  value = docker_plugin.this.name
+  value       = var.create_docker_plugin ? docker_plugin.this[0].name : null
   description = "Docker Plugin name."
 }
 
 output "plugin_id" {
-  value = docker_plugin.this.id
+  value       = var.create_docker_plugin ? docker_plugin.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -77,12 +77,12 @@ output "plugin_id" {
 # -----------------------------------------------------------------------------
 
 output "registry_image_name" {
-  value = docker_registry_image.this.name
+  value       = var.create_registry_image ? docker_registry_image.this[0].name : null
   description = "The name of the Docker image."
 }
 
 output "registry_image_id" {
-  value = docker_registry_image.this.id
+  value       = var.create_registry_image ? docker_registry_image.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -91,13 +91,12 @@ output "registry_image_id" {
 # -----------------------------------------------------------------------------
 
 output "secret_name" {
-  value = docker_secret.this.name
+  value       = var.create_docker_secret ? docker_secret.this[0].name : null
   description = "User-defined name of the secret."
-
 }
 
 output "secret_id" {
-  value = docker_secret.this.id
+  value       = var.create_docker_secret ? docker_secret.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -105,13 +104,13 @@ output "secret_id" {
 # DOCKER SERVICE
 # -----------------------------------------------------------------------------
 
- output "service_name" {
-   value = docker_service.this.name
-   description = "Name of the service."
- }
+output "service_name" {
+  value       = var.create_docker_service ? docker_service.this[0].name : null
+  description = "Name of the service."
+}
 
 output "service_id" {
-  value = docker_service.this.id
+  value       = var.create_docker_service ? docker_service.this[0].id : null
   description = "The ID of this resource."
 }
 
@@ -120,11 +119,11 @@ output "service_id" {
 # -----------------------------------------------------------------------------
 
 output "volume_name" {
-  value = docker_volume.this.name
+  value       = var.create_docker_volume ? docker_volume.this[0].name : null
   description = "The name of the Docker volume (will be generated if not provided)."
 }
 
 output "volume_id" {
-  value = docker_volume.this.id
+  value       = var.create_docker_volume ? docker_volume.this[0].id : null
   description = "The ID of this resource."
 }
