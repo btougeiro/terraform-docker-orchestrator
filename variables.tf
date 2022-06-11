@@ -24,12 +24,6 @@ variable "config_data" {
   default     = null
 }
 
-variable "config_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
-  default     = null
-}
-
 # -----------------------------------------------------------------------------
 # DOCKER CONTAINER
 # -----------------------------------------------------------------------------
@@ -151,12 +145,6 @@ variable "container_host" {
 variable "container_hostname" {
   type        = string
   description = "(Optional) (String) Hostname of the container."
-  default     = null
-}
-
-variable "container_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
   default     = null
 }
 
@@ -403,12 +391,6 @@ variable "image_force_remove" {
   default     = false
 }
 
-variable "image_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
-  default     = null
-}
-
 variable "image_keep_locally" {
   type        = bool
   description = "(Optional) (Boolean) If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the docker local storage on destroy operation."
@@ -452,12 +434,6 @@ variable "network_check_duplicate" {
 variable "network_driver" {
   type        = string
   description = "(Optional) (String) The driver of the Docker network. Possible values are bridge, host, overlay, macvlan. See network docs for more details."
-  default     = null
-}
-
-variable "network_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
   default     = null
 }
 
@@ -567,12 +543,6 @@ variable "plugin_grant_permissions" {
   default     = []
 }
 
-variable "plugin_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
-  default     = null
-}
-
 # -----------------------------------------------------------------------------
 # DOCKER REGISTRY IMAGE
 # -----------------------------------------------------------------------------
@@ -593,12 +563,6 @@ variable "registry_image_build" {
   type        = list(any)
   description = "(Optional) (Block List, Max: 1) Definition for building the image."
   default     = []
-}
-
-variable "registry_image_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
-  default     = null
 }
 
 variable "registry_image_insecure_skip_verify" {
@@ -632,12 +596,6 @@ variable "secret_data" {
 variable "secret_name" {
   type        = string
   description = "(Required) (String) User-defined name of the secret."
-  default     = null
-}
-
-variable "secret_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
   default     = null
 }
 
@@ -687,12 +645,6 @@ variable "service_endpoint_spec" {
   default     = []
 }
 
-variable "service_id" {
-  type        = string
-  description = "(Optional) (String) The ID of this resource."
-  default     = null
-}
-
 variable "service_labels" {
   type        = list(any)
   description = "(Optional) (Block Set) User-defined key/value metadata."
@@ -727,32 +679,26 @@ variable "create_docker_volume" {
   default     = false
 }
 
- variable "volume_driver" {
-   type = string
-   description = "(Optional) (String) Driver type for the volume. Defaults to local."
-   default = "local"
- }
+variable "volume_driver" {
+  type        = string
+  description = "(Optional) (String) Driver type for the volume. Defaults to local."
+  default     = "local"
+}
 
- variable "volume_driver_opts" {
-   type = map(string)
-   description = "(Optional) (Map of String) Options specific to the driver."
-   default = {}
- }
+variable "volume_driver_opts" {
+  type        = map(string)
+  description = "(Optional) (Map of String) Options specific to the driver."
+  default     = {}
+}
 
- variable "volume_id" {
-   type = string
-   description = "(Optional) (String) The ID of this resource."
-   default = null
- }
+variable "volume_labels" {
+  type        = list(any)
+  description = "(Optional) (Block Set) User-defined key/value metadata."
+  default     = []
+}
 
- variable "volume_labels" {
-   type = list(any)
-   description = "(Optional) (Block Set) User-defined key/value metadata."
-   default = []
- }
-
- variable "volume_name" {
-   type = string
-   description = "(Optional) (String) The name of the Docker volume (will be generated if not provided)."
-   default = null
- }
+variable "volume_name" {
+  type        = string
+  description = "(Optional) (String) The name of the Docker volume (will be generated if not provided)."
+  default     = null
+}
