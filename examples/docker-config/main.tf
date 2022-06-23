@@ -16,6 +16,12 @@ provider "docker" {
 #  host = "unix:///var/run/docker.sock"
 #}
 
+# Docker SSH
+#provider "docker" {
+#  host     = "ssh://user@remote-host:22"
+#  ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
+#}
+
 # -----------------------------------------------------------------------------
 # DOCKER CONFIG EXAMPLE 1
 # -----------------------------------------------------------------------------
