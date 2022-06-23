@@ -18,8 +18,12 @@ provider "docker" {
 
 # Docker SSH
 #provider "docker" {
-#  host     = "ssh://user@remote-host:22"
-#  ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
+#  host = "ssh://user@remote-host:port"
+#  ssh_opts = [
+#    "-o", "StrictHostKeyChecking=no",
+#    "-o", "UserKnownHostsFile=/dev/null",
+#    "-o", "IdentityFile=~/.ssh/id_rsa"
+#  ]
 #}
 
 # -----------------------------------------------------------------------------
