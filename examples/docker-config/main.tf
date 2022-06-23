@@ -67,7 +67,7 @@ module "docker_config_with_service" {
             {
               config_name = module.docker_config_with_service.config_name
               config_id   = module.docker_config_with_service.config_id
-              file_name = "/config.json"
+              file_name   = "/config.json"
             }
           ]
         }
