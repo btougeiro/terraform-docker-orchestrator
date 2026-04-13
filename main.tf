@@ -53,12 +53,6 @@ module "container" {
   depends_on = [module.network, module.volume, module.config, module.secret, module.image]
 }
 
-module "exec" {
-  source     = "./modules/exec"
-  execs      = var.execs
-  depends_on = [module.container]
-}
-
 module "service" {
   source   = "./modules/service"
   services = var.services
