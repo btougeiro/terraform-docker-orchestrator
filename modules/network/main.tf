@@ -5,14 +5,14 @@
 resource "docker_network" "this" {
   for_each = var.networks
 
-  name       = each.value.name
-  attachable = lookup(each.value, "attachable", null)
-  driver     = lookup(each.value, "driver", "bridge")
-  ingress    = lookup(each.value, "ingress", null)
-  internal   = lookup(each.value, "internal", null)
+  name        = each.value.name
+  attachable  = lookup(each.value, "attachable", null)
+  driver      = lookup(each.value, "driver", "bridge")
+  ingress     = lookup(each.value, "ingress", null)
+  internal    = lookup(each.value, "internal", null)
   ipam_driver = lookup(each.value, "ipam_driver", "default")
-  ipv6       = lookup(each.value, "ipv6", null)
-  options    = lookup(each.value, "options", null)
+  ipv6        = lookup(each.value, "ipv6", null)
+  options     = lookup(each.value, "options", null)
 
   dynamic "ipam_config" {
     for_each = lookup(each.value, "ipam_config", [])
