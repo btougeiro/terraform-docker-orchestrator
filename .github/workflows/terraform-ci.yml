@@ -45,10 +45,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.2
+
       - name: Setup TFLint
         uses: terraform-linters/setup-tflint@v4
         with:
           tflint_version: v0.48.0
+
+      - name: Initialize for TFLint
+        run: |
+          tofu init -backend=false
+          for dir in modules/*/; do
+            if [ -f "${dir}main.tf" ]; then
+              echo "Initializing sub-module: ${dir}"
+              cd "${GITHUB_WORKSPACE}/${dir}"
+              tofu init -backend=false
+            fi
+          done
 
       - name: Run TFLint
         run: |
