@@ -34,6 +34,7 @@ resource "docker_container" "this" {
   must_run              = lookup(each.value, "must_run", true)
   network_mode          = lookup(each.value, "network_mode", "bridge")
   pid_mode              = lookup(each.value, "pid_mode", null)
+  platform              = lookup(each.value, "platform", null)
   privileged            = lookup(each.value, "privileged", false)
   publish_all_ports     = lookup(each.value, "publish_all_ports", false)
   read_only             = lookup(each.value, "read_only", false)
