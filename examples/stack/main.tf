@@ -15,10 +15,10 @@ module "docker_stack" {
 
   containers = {
     web = {
-      name  = "nginx-frontend"
-      image = "nginx:latest"
+      name              = "nginx-frontend"
+      image             = "nginx:latest"
       networks_advanced = [{ name = "my-app-network" }]
-      ports = [{ internal = 80, external = 8080 }]
+      ports             = [{ internal = 80, external = 8080 }]
       mounts = [
         {
           target = "/usr/share/nginx/html"

@@ -43,4 +43,6 @@ module "docker_stack" {
 - [Image](./modules/image)
 - [Registry Image](./modules/registry_image)
 - [Plugin](./modules/plugin)
+- [Tag](./modules/tag)
+- [Buildx Builder](./modules/buildx_builder)
 - [Service (Swarm)](./modules/service)

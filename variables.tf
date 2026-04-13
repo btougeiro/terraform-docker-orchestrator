@@ -52,12 +52,6 @@ variable "buildx_builders" {
   default     = {}
 }
 
-variable "execs" {
-  description = "Map of exec configurations"
-  type        = any
-  default     = {}
-}
-
 variable "containers" {
   description = "Map of container configurations"
   type        = any

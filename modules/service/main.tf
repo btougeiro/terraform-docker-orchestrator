@@ -13,15 +13,15 @@ resource "docker_service" "this" {
       dynamic "container_spec" {
         for_each = lookup(task_spec.value, "container_spec", [])
         content {
-          image   = lookup(container_spec.value, "image", null)
-          args    = lookup(container_spec.value, "args", null)
-          command = lookup(container_spec.value, "command", null)
-          dir     = lookup(container_spec.value, "dir", null)
-          env     = lookup(container_spec.value, "env", null)
-          groups  = lookup(container_spec.value, "groups", null)
-          hostname = lookup(container_spec.value, "hostname", null)
-          isolation = lookup(container_spec.value, "isolation", null)
-          read_only = lookup(container_spec.value, "read_only", null)
+          image             = lookup(container_spec.value, "image", null)
+          args              = lookup(container_spec.value, "args", null)
+          command           = lookup(container_spec.value, "command", null)
+          dir               = lookup(container_spec.value, "dir", null)
+          env               = lookup(container_spec.value, "env", null)
+          groups            = lookup(container_spec.value, "groups", null)
+          hostname          = lookup(container_spec.value, "hostname", null)
+          isolation         = lookup(container_spec.value, "isolation", null)
+          read_only         = lookup(container_spec.value, "read_only", null)
           stop_grace_period = lookup(container_spec.value, "stop_grace_period", null)
           stop_signal       = lookup(container_spec.value, "stop_signal", null)
           user              = lookup(container_spec.value, "user", null)
@@ -47,10 +47,10 @@ resource "docker_service" "this" {
           dynamic "healthcheck" {
             for_each = lookup(container_spec.value, "healthcheck", [])
             content {
-              test         = lookup(healthcheck.value, "test", null)
-              interval     = lookup(healthcheck.value, "interval", null)
-              retries      = lookup(healthcheck.value, "retries", null)
-              timeout      = lookup(healthcheck.value, "timeout", null)
+              test     = lookup(healthcheck.value, "test", null)
+              interval = lookup(healthcheck.value, "interval", null)
+              retries  = lookup(healthcheck.value, "retries", null)
+              timeout  = lookup(healthcheck.value, "timeout", null)
             }
           }
 
@@ -65,9 +65,9 @@ resource "docker_service" "this" {
           dynamic "mounts" {
             for_each = lookup(container_spec.value, "mounts", [])
             content {
-              target = lookup(mounts.value, "target", null)
-              type   = lookup(mounts.value, "type", null)
-              source = lookup(mounts.value, "source", null)
+              target    = lookup(mounts.value, "target", null)
+              type      = lookup(mounts.value, "type", null)
+              source    = lookup(mounts.value, "source", null)
               read_only = lookup(mounts.value, "read_only", null)
             }
           }
@@ -82,7 +82,14 @@ resource "docker_service" "this" {
         }
       }
 
-      networks = lookup(task_spec.value, "networks", null)
+      dynamic "networks_advanced" {
+        for_each = lookup(task_spec.value, "networks_advanced", [])
+        content {
+          name    = lookup(networks_advanced.value, "name", null)
+          id      = lookup(networks_advanced.value, "id", null)
+          aliases = lookup(networks_advanced.value, "aliases", null)
+        }
+      }
 
       dynamic "restart_policy" {
         for_each = lookup(task_spec.value, "restart_policy", [])

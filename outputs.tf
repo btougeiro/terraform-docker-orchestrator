@@ -52,11 +52,6 @@ output "buildx_builders" {
   value       = module.buildx_builder.buildx_builders
 }
 
-output "execs" {
-  description = "A map of exec objects managed by the module."
-  value       = module.exec.execs
-}
-
 output "services" {
   description = "A map of service objects managed by the module."
   value       = module.service.services
