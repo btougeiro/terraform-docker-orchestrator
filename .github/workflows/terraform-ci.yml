@@ -55,18 +55,21 @@ jobs:
         with:
           tflint_version: v0.48.0
 
-      - name: Initialize for TFLint
+      - name: Initialize and Run TFLint
         run: |
+          # Root module
+          echo "Linting root module..."
           tofu init -backend=false
+          tflint --init
+          tflint
+
+          # Sub-modules
           for dir in modules/*/; do
             if [ -f "${dir}main.tf" ]; then
-              echo "Initializing sub-module: ${dir}"
+              echo "Linting sub-module: ${dir}"
               cd "${GITHUB_WORKSPACE}/${dir}"
               tofu init -backend=false
+              tflint --init
+              tflint
             fi
           done
-
-      - name: Run TFLint
-        run: |
-          tflint --recursive --init
-          tflint --recursive
