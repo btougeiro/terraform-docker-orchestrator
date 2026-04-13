@@ -82,7 +82,14 @@ resource "docker_service" "this" {
         }
       }
 
-      networks = lookup(task_spec.value, "networks", null)
+      dynamic "networks_advanced" {
+        for_each = lookup(task_spec.value, "networks_advanced", [])
+        content {
+          name    = lookup(networks_advanced.value, "name", null)
+          id      = lookup(networks_advanced.value, "id", null)
+          aliases = lookup(networks_advanced.value, "aliases", null)
+        }
+      }
 
       dynamic "restart_policy" {
         for_each = lookup(task_spec.value, "restart_policy", [])

@@ -10,8 +10,8 @@ resource "docker_image" "this" {
   dynamic "build" {
     for_each = lookup(each.value, "build", [])
     content {
-      path         = lookup(build.value, "path", null)
-      build_arg    = lookup(build.value, "build_arg", null)
+      context      = lookup(build.value, "context", ".")
+      build_args   = lookup(build.value, "build_args", null)
       dockerfile   = lookup(build.value, "dockerfile", null)
       force_remove = lookup(build.value, "force_remove", null)
       label        = lookup(build.value, "label", null)
