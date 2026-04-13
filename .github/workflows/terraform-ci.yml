@@ -1,0 +1,56 @@
+name: OpenTofu CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Validate Module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.2
+
+      - name: OpenTofu Format Check
+        run: tofu fmt -check -recursive
+
+      - name: Initialize and Validate Root
+        run: |
+          tofu init -backend=false
+          tofu validate
+
+      - name: Initialize and Validate Sub-modules
+        run: |
+          for dir in modules/*/; do
+            if [ -f "${dir}main.tf" ]; then
+              echo "Validating sub-module: ${dir}"
+              cd "${GITHUB_WORKSPACE}/${dir}"
+              tofu init -backend=false
+              tofu validate
+            fi
+          done
+
+  lint:
+    name: Lint Module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.48.0
+
+      - name: Run TFLint
+        run: |
+          tflint --recursive --init
+          tflint --recursive

@@ -1,10 +1,15 @@
-module "network" {
+module "networks" {
   source = "../../modules/network"
 
   networks = {
-    app_net = {
-      name   = "my-app-network"
+    frontend = {
+      name   = "frontend-net"
       driver = "bridge"
+    }
+    backend = {
+      name     = "backend-net"
+      driver   = "bridge"
+      internal = true
     }
   }
 }

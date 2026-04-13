@@ -1,10 +1,12 @@
-module "volume" {
+module "volumes" {
   source = "../../modules/volume"
 
   volumes = {
-    data_volume = {
-      name   = "my-data-volume"
-      driver = "local"
+    web_data = {
+      name = "web-data-volume"
+    }
+    db_data = {
+      name = "db-data-volume"
     }
   }
 }
