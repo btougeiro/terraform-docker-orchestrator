@@ -50,8 +50,10 @@ jobs:
         with:
           tofu_version: 1.6.2
 
-      - name: OpenTofu Test
-        run: tofu test
+      - name: OpenTofu Init and Test
+        run: |
+          tofu init -backend=false
+          tofu test
 
   lint:
     name: Lint Module

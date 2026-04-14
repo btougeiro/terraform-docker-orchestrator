@@ -18,8 +18,5 @@ resource "docker_volume" "this" {
   }
 }
 
-data "docker_volume" "this" {
-  for_each = { for k, v in var.volumes : k => v if !v.create }
-
-  name = each.value.name
-}
+# Note: The docker provider doesn't support data "docker_volume".
+# For volumes, we only manage the lifecycle of volumes we create.

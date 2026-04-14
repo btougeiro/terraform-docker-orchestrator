@@ -3,6 +3,6 @@
 # -----------------------------------------------------------------------------
 
 output "volumes" {
-  description = "A map containing all volume resources, both created and referenced."
-  value       = merge(docker_volume.this, data.docker_volume.this)
+  description = "A map containing all volume resources created by this module."
+  value       = docker_volume.this
 }
