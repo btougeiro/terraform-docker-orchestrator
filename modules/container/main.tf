@@ -10,127 +10,127 @@ resource "docker_container" "this" {
   image = each.value.image
 
   # Container Runtime Control
-  attach                = lookup(each.value, "attach", false)
-  command               = lookup(each.value, "command", null)
-  cpu_set               = lookup(each.value, "cpu_set", null)
-  cpu_shares            = lookup(each.value, "cpu_shares", null)
-  destroy_grace_seconds = lookup(each.value, "destroy_grace_seconds", null)
-  dns                   = lookup(each.value, "dns", null)
-  dns_opts              = lookup(each.value, "dns_opts", null)
-  dns_search            = lookup(each.value, "dns_search", null)
-  domainname            = lookup(each.value, "domainname", null)
-  entrypoint            = lookup(each.value, "entrypoint", null)
-  env                   = lookup(each.value, "env", [])
-  group_add             = lookup(each.value, "group_add", null)
-  hostname              = lookup(each.value, "hostname", null)
-  init                  = lookup(each.value, "init", null)
-  ipc_mode              = lookup(each.value, "ipc_mode", null)
-  log_driver            = lookup(each.value, "log_driver", "json-file")
-  log_opts              = lookup(each.value, "log_opts", null)
-  logs                  = lookup(each.value, "logs", false)
-  max_retry_count       = lookup(each.value, "max_retry_count", null)
-  memory                = lookup(each.value, "memory", null)
-  memory_swap           = lookup(each.value, "memory_swap", null)
-  must_run              = lookup(each.value, "must_run", true)
-  network_mode          = lookup(each.value, "network_mode", "bridge")
-  pid_mode              = lookup(each.value, "pid_mode", null)
-  platform              = lookup(each.value, "platform", null)
-  privileged            = lookup(each.value, "privileged", false)
-  publish_all_ports     = lookup(each.value, "publish_all_ports", false)
-  read_only             = lookup(each.value, "read_only", false)
-  remove_volumes        = lookup(each.value, "remove_volumes", true)
-  restart               = lookup(each.value, "restart", "no")
-  rm                    = lookup(each.value, "rm", false)
-  security_opts         = lookup(each.value, "security_opts", [])
-  shm_size              = lookup(each.value, "shm_size", null)
-  start                 = lookup(each.value, "start", true)
-  stdin_open            = lookup(each.value, "stdin_open", false)
-  storage_opts          = lookup(each.value, "storage_opts", null)
-  sysctls               = lookup(each.value, "sysctls", null)
-  tmpfs                 = lookup(each.value, "tmpfs", null)
-  tty                   = lookup(each.value, "tty", false)
-  user                  = lookup(each.value, "user", null)
-  userns_mode           = lookup(each.value, "userns_mode", null)
-  working_dir           = lookup(each.value, "working_dir", null)
+  attach                = each.value.attach
+  command               = each.value.command
+  cpu_set               = each.value.cpu_set
+  cpu_shares            = each.value.cpu_shares
+  destroy_grace_seconds = each.value.destroy_grace_seconds
+  dns                   = each.value.dns
+  dns_opts              = each.value.dns_opts
+  dns_search            = each.value.dns_search
+  domainname            = each.value.domainname
+  entrypoint            = each.value.entrypoint
+  env                   = each.value.env
+  group_add             = each.value.group_add
+  hostname              = each.value.hostname
+  init                  = each.value.init
+  ipc_mode              = each.value.ipc_mode
+  log_driver            = each.value.log_driver
+  log_opts              = each.value.log_opts
+  logs                  = each.value.logs
+  max_retry_count       = each.value.max_retry_count
+  memory                = each.value.memory
+  memory_swap           = each.value.memory_swap
+  must_run              = each.value.must_run
+  network_mode          = each.value.network_mode
+  pid_mode              = each.value.pid_mode
+  platform              = each.value.platform
+  privileged            = each.value.privileged
+  publish_all_ports     = each.value.publish_all_ports
+  read_only             = each.value.read_only
+  remove_volumes        = each.value.remove_volumes
+  restart               = each.value.restart
+  rm                    = each.value.rm
+  security_opts         = each.value.security_opts
+  shm_size              = each.value.shm_size
+  start                 = each.value.start
+  stdin_open            = each.value.stdin_open
+  storage_opts          = each.value.storage_opts
+  sysctls               = each.value.sysctls
+  tmpfs                 = each.value.tmpfs
+  tty                   = each.value.tty
+  user                  = each.value.user
+  userns_mode           = each.value.userns_mode
+  working_dir           = each.value.working_dir
 
   # Dynamic Blocks for Complex Objects
   dynamic "capabilities" {
-    for_each = lookup(each.value, "capabilities", [])
+    for_each = each.value.capabilities
     content {
-      add  = lookup(capabilities.value, "add", null)
-      drop = lookup(capabilities.value, "drop", null)
+      add  = capabilities.value.add
+      drop = capabilities.value.drop
     }
   }
 
   dynamic "devices" {
-    for_each = lookup(each.value, "devices", [])
+    for_each = each.value.devices
     content {
-      host_path      = lookup(devices.value, "host_path", null)
-      container_path = lookup(devices.value, "container_path", null)
-      permissions    = lookup(devices.value, "permissions", null)
+      host_path      = devices.value.host_path
+      container_path = devices.value.container_path
+      permissions    = devices.value.permissions
     }
   }
 
   dynamic "healthcheck" {
-    for_each = lookup(each.value, "healthcheck", [])
+    for_each = each.value.healthcheck
     content {
-      test         = lookup(healthcheck.value, "test", null)
-      interval     = lookup(healthcheck.value, "interval", null)
-      retries      = lookup(healthcheck.value, "retries", null)
-      start_period = lookup(healthcheck.value, "start_period", null)
-      timeout      = lookup(healthcheck.value, "timeout", null)
+      test         = healthcheck.value.test
+      interval     = healthcheck.value.interval
+      retries      = healthcheck.value.retries
+      start_period = healthcheck.value.start_period
+      timeout      = healthcheck.value.timeout
     }
   }
 
   dynamic "host" {
-    for_each = lookup(each.value, "host", [])
+    for_each = each.value.host
     content {
-      host = lookup(host.value, "host", null)
-      ip   = lookup(host.value, "ip", null)
+      host = host.value.host
+      ip   = host.value.ip
     }
   }
 
   dynamic "labels" {
-    for_each = lookup(each.value, "labels", [])
+    for_each = each.value.labels
     content {
-      label = lookup(labels.value, "label", null)
-      value = lookup(labels.value, "value", null)
+      label = labels.value.label
+      value = labels.value.value
     }
   }
 
   dynamic "mounts" {
-    for_each = lookup(each.value, "mounts", [])
+    for_each = each.value.mounts
     content {
-      target    = lookup(mounts.value, "target", null)
-      type      = lookup(mounts.value, "type", "bind")
-      read_only = lookup(mounts.value, "read_only", null)
-      source    = lookup(mounts.value, "source", null)
+      target    = mounts.value.target
+      type      = mounts.value.type
+      read_only = mounts.value.read_only
+      source    = mounts.value.source
 
       dynamic "bind_options" {
-        for_each = lookup(mounts.value, "bind_options", [])
+        for_each = mounts.value.bind_options
         content {
-          propagation = lookup(bind_options.value, "propagation", null)
+          propagation = bind_options.value.propagation
         }
       }
 
       dynamic "tmpfs_options" {
-        for_each = lookup(mounts.value, "tmpfs_options", [])
+        for_each = mounts.value.tmpfs_options
         content {
-          mode       = lookup(tmpfs_options.value, "mode", null)
-          size_bytes = lookup(tmpfs_options.value, "size_bytes", null)
+          mode       = tmpfs_options.value.mode
+          size_bytes = tmpfs_options.value.size_bytes
         }
       }
 
       dynamic "volume_options" {
-        for_each = lookup(mounts.value, "volume_options", [])
+        for_each = mounts.value.volume_options
         content {
-          driver_name    = lookup(volume_options.value, "driver_name", null)
-          driver_options = lookup(volume_options.value, "driver_options", null)
+          driver_name    = volume_options.value.driver_name
+          driver_options = volume_options.value.driver_options
           dynamic "labels" {
-            for_each = lookup(volume_options.value, "labels", [])
+            for_each = volume_options.value.labels
             content {
-              label = lookup(labels.value, "label", null)
-              value = lookup(labels.value, "value", null)
+              label = labels.value.label
+              value = labels.value.value
             }
           }
         }
@@ -139,54 +139,54 @@ resource "docker_container" "this" {
   }
 
   dynamic "networks_advanced" {
-    for_each = lookup(each.value, "networks_advanced", [])
+    for_each = each.value.networks_advanced
     content {
-      name         = lookup(networks_advanced.value, "name", null)
-      aliases      = lookup(networks_advanced.value, "aliases", null)
-      ipv4_address = lookup(networks_advanced.value, "ipv4_address", null)
-      ipv6_address = lookup(networks_advanced.value, "ipv6_address", null)
+      name         = networks_advanced.value.name
+      aliases      = networks_advanced.value.aliases
+      ipv4_address = networks_advanced.value.ipv4_address
+      ipv6_address = networks_advanced.value.ipv6_address
     }
   }
 
   dynamic "ports" {
-    for_each = lookup(each.value, "ports", [])
+    for_each = each.value.ports
     content {
-      internal = lookup(ports.value, "internal", null)
-      external = lookup(ports.value, "external", null)
-      ip       = lookup(ports.value, "ip", "0.0.0.0")
-      protocol = lookup(ports.value, "protocol", "tcp")
+      internal = ports.value.internal
+      external = ports.value.external
+      ip       = ports.value.ip
+      protocol = ports.value.protocol
     }
   }
 
   dynamic "ulimit" {
-    for_each = lookup(each.value, "ulimit", [])
+    for_each = each.value.ulimit
     content {
-      name = lookup(ulimit.value, "name", null)
-      hard = lookup(ulimit.value, "hard", null)
-      soft = lookup(ulimit.value, "soft", null)
+      name = ulimit.value.name
+      hard = ulimit.value.hard
+      soft = ulimit.value.soft
     }
   }
 
   dynamic "upload" {
-    for_each = lookup(each.value, "upload", [])
+    for_each = each.value.upload
     content {
-      file           = lookup(upload.value, "file", null)
-      content        = lookup(upload.value, "content", null)
-      content_base64 = lookup(upload.value, "content_base64", null)
-      executable     = lookup(upload.value, "executable", null)
-      source         = lookup(upload.value, "source", null)
-      source_hash    = lookup(upload.value, "source_hash", null)
+      file           = upload.value.file
+      content        = upload.value.content
+      content_base64 = upload.value.content_base64
+      executable     = upload.value.executable
+      source         = upload.value.source
+      source_hash    = upload.value.source_hash
     }
   }
 
   dynamic "volumes" {
-    for_each = lookup(each.value, "volumes", [])
+    for_each = each.value.volumes
     content {
-      container_path = lookup(volumes.value, "container_path", null)
-      from_container = lookup(volumes.value, "from_container", null)
-      host_path      = lookup(volumes.value, "host_path", null)
-      read_only      = lookup(volumes.value, "read_only", null)
-      volume_name    = lookup(volumes.value, "volume_name", null)
+      container_path = volumes.value.container_path
+      from_container = volumes.value.from_container
+      host_path      = volumes.value.host_path
+      read_only      = volumes.value.read_only
+      volume_name    = volumes.value.volume_name
     }
   }
 }

@@ -1,4 +1,8 @@
+# -----------------------------------------------------------------------------
+# DOCKER VOLUME SUB-MODULE OUTPUTS
+# -----------------------------------------------------------------------------
+
 output "volumes" {
-  description = "A map of volume objects managed by this sub-module."
-  value       = docker_volume.this
+  description = "A map containing all volume resources, both created and referenced."
+  value       = merge(docker_volume.this, data.docker_volume.this)
 }

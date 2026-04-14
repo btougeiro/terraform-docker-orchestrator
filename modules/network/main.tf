@@ -3,32 +3,38 @@
 # -----------------------------------------------------------------------------
 
 resource "docker_network" "this" {
-  for_each = var.networks
+  for_each = { for k, v in var.networks : k => v if v.create }
 
   name        = each.value.name
-  attachable  = lookup(each.value, "attachable", null)
-  driver      = lookup(each.value, "driver", "bridge")
-  ingress     = lookup(each.value, "ingress", null)
-  internal    = lookup(each.value, "internal", null)
-  ipam_driver = lookup(each.value, "ipam_driver", "default")
-  ipv6        = lookup(each.value, "ipv6", null)
-  options     = lookup(each.value, "options", null)
+  attachable  = each.value.attachable
+  driver      = each.value.driver
+  ingress     = each.value.ingress
+  internal    = each.value.internal
+  ipam_driver = each.value.ipam_driver
+  ipv6        = each.value.ipv6
+  options     = each.value.options
 
   dynamic "ipam_config" {
-    for_each = lookup(each.value, "ipam_config", [])
+    for_each = each.value.ipam_config
     content {
-      aux_address = lookup(ipam_config.value, "aux_address", null)
-      gateway     = lookup(ipam_config.value, "gateway", null)
-      ip_range    = lookup(ipam_config.value, "ip_range", null)
-      subnet      = lookup(ipam_config.value, "subnet", null)
+      aux_address = ipam_config.value.aux_address
+      gateway     = ipam_config.value.gateway
+      ip_range    = ipam_config.value.ip_range
+      subnet      = ipam_config.value.subnet
     }
   }
 
   dynamic "labels" {
-    for_each = lookup(each.value, "labels", [])
+    for_each = each.value.labels
     content {
-      label = lookup(labels.value, "label", null)
-      value = lookup(labels.value, "value", null)
+      label = labels.value.label
+      value = labels.value.value
     }
   }
+}
+
+data "docker_network" "this" {
+  for_each = { for k, v in var.networks : k => v if !v.create }
+
+  name = each.value.name
 }
