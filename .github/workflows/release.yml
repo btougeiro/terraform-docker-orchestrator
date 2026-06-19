@@ -77,6 +77,6 @@ jobs:
           git tag "$TAG"
           git push origin "$TAG"
           gh release create "$TAG" \
-            --title "Release $TAG" \
+            --title "$TAG" \
             --generate-notes \
             --latest
