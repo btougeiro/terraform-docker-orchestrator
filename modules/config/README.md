@@ -8,6 +8,30 @@ This sub-module manages Docker configs using `for_each`.
 This sub-module manages Docker configs using `for_each`.
 
 <!-- BEGIN\_TF\_DOCS -->
+# Docker Config Sub-module
+
+This sub-module manages Docker configs using `for_each`.
+
+<!-- BEGIN\\_TF\\_DOCS -->
+<!-- END\\_TF\\_DOCS -->
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [docker\_config.this](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs/resources/config) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input\_configs"></a> [configs](#input\\_configs) | Map of config configurations | `any` | `{}` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output\_configs"></a> [configs](#output\\_configs) | A map of all Docker config resources managed by this module. |
 <!-- END\_TF\_DOCS -->
 
 ## Resources
