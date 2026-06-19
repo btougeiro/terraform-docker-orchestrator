@@ -1,3 +1,4 @@
 output "registry_images" {
-  value = docker_registry_image.this
+  description = "A map of all Docker registry image resources managed by this module."
+  value       = docker_registry_image.this
 }

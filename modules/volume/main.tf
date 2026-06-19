@@ -3,17 +3,20 @@
 # -----------------------------------------------------------------------------
 
 resource "docker_volume" "this" {
-  for_each = var.volumes
+  for_each = { for k, v in var.volumes : k => v if v.create }
 
   name        = each.value.name
-  driver      = lookup(each.value, "driver", "local")
-  driver_opts = lookup(each.value, "driver_opts", null)
+  driver      = each.value.driver
+  driver_opts = each.value.driver_opts
 
   dynamic "labels" {
-    for_each = lookup(each.value, "labels", [])
+    for_each = each.value.labels
     content {
-      label = lookup(labels.value, "label", null)
-      value = lookup(labels.value, "value", null)
+      label = labels.value.label
+      value = labels.value.value
     }
   }
 }
+
+# Note: The docker provider doesn't support data "docker_volume".
+# For volumes, we only manage the lifecycle of volumes we create.

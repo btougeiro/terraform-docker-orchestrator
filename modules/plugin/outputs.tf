@@ -1,3 +1,4 @@
 output "plugins" {
-  value = docker_plugin.this
+  description = "A map of all Docker plugin resources managed by this module."
+  value       = docker_plugin.this
 }

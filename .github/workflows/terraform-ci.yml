@@ -38,6 +38,23 @@ jobs:
             fi
           done
 
+  test:
+    name: Run OpenTofu Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.2
+
+      - name: OpenTofu Init and Test
+        run: |
+          tofu init -backend=false
+          tofu test
+
   lint:
     name: Lint Module
     runs-on: ubuntu-latest
@@ -73,3 +90,25 @@ jobs:
               tflint
             fi
           done
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - name: Generate Terraform Docs
+        uses: terraform-docs/gh-actions@v1
+        with:
+          working-dir: .
+          recursive: true
+          recursive-path: modules
+          config-file: .terraform-docs.yml
+          output-file: README.md
+          git-push: true
+          git-push-user-name: github-actions[bot]
+          git-push-user-email: github-actions[bot]@users.noreply.github.com

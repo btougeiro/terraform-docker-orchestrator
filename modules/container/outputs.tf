@@ -1,4 +1,8 @@
+# -----------------------------------------------------------------------------
+# DOCKER CONTAINER SUB-MODULE OUTPUTS
+# -----------------------------------------------------------------------------
+
 output "containers" {
-  description = "A map of container objects managed by this sub-module."
+  description = "A map containing all container resources."
   value       = docker_container.this
 }
