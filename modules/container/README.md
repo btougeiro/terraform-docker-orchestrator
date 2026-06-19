@@ -6,7 +6,7 @@ This sub-module manages one or more Docker containers using `for_each`.
 
 ```hcl
 module "containers" {
-  source = "btougeiro/docker-module//modules/container"
+  source = "btougeiro/module/docker//modules/container"
 
   containers = {
     web = {

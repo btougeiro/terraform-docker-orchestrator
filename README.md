@@ -12,7 +12,7 @@ This module provides a unified, modular approach to managing Docker resources (C
 
 ```hcl
 module "docker_stack" {
-  source = "btougeiro/docker-module"
+  source = "btougeiro/module/docker"
 
   networks = {
     app_net = { name = "app-network" }
