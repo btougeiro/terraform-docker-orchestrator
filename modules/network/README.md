@@ -6,7 +6,7 @@ This sub-module manages one or more Docker networks using `for_each`.
 
 ```hcl
 module "networks" {
-  source = "btougeiro/docker-module//modules/network"
+  source = "btougeiro/module/docker//modules/network"
 
   networks = {
     app_network = {

@@ -6,7 +6,7 @@ This sub-module manages one or more Docker Swarm services using `for_each`.
 
 ```hcl
 module "services" {
-  source = "btougeiro/docker-module//modules/service"
+  source = "btougeiro/module/docker//modules/service"
 
   services = {
     web_service = {

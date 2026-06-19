@@ -6,7 +6,7 @@ This sub-module manages one or more Docker volumes using `for_each`.
 
 ```hcl
 module "volumes" {
-  source = "btougeiro/docker-module//modules/volume"
+  source = "btougeiro/module/docker//modules/volume"
 
   volumes = {
     data_volume = {
