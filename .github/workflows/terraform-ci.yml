@@ -92,17 +92,23 @@ jobs:
           done
 
   docs:
-    name: Documentation Check
+    name: Documentation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Generate Terraform Docs
         uses: terraform-docs/gh-actions@v1
         with:
           working-dir: .
+          recursive: true
+          recursive-path: modules
           config-file: .terraform-docs.yml
           output-file: README.md
-          output-mode: inject
-          fail-on-diff: true
+          git-push: true
+          git-push-user-name: github-actions[bot]
+          git-push-user-email: github-actions[bot]@users.noreply.github.com
