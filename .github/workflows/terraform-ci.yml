@@ -3,8 +3,13 @@ name: OpenTofu CI
 on:
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main ]
+
+permissions:
+  contents: read
 
 jobs:
   validate:
@@ -90,3 +95,33 @@ jobs:
               tflint
             fi
           done
+
+  registry-publish:
+    name: Publish to Terraform Registry
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.2
+
+      - name: Configure Terraform Registry Credentials
+        run: |
+          tofu login ${{ env.TFE_HOSTNAME }}
+        env:
+          TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
+          TFE_HOSTNAME: ${{ env.TFE_HOSTNAME }}
+
+      - name: Publish Module to Registry
+        run: |
+          tofu init -backend=false
+          tofu test
+        env:
+          TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
+          TFE_HOSTNAME: ${{ env.TFE_HOSTNAME }}

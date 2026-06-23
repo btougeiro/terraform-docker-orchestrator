@@ -68,15 +68,41 @@ jobs:
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "Next release: $TAG (bump: ${{ steps.bump.outputs.type }})"
 
+      - name: Update CHANGELOG
+        if: steps.bump.outputs.type != 'skip'
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          DATE=$(date +%Y-%m-%d)
+
+          # Replace [Unreleased] with new version header
+          sed -i "s/\[Unreleased\]/\[Unreleased]\n\n## \[$TAG\] - $DATE/" CHANGELOG.md
+
+          # Update links at the bottom
+          sed -i "s|\[Unreleased\]:.*|\[Unreleased\]: https://github.com/${{ github.repository }}/compare/$TAG...HEAD\n\[$TAG\]: https://github.com/${{ github.repository }}/releases/tag/$TAG|" CHANGELOG.md
+
+          # Commit the CHANGELOG update
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: update CHANGELOG for $TAG"
+          git push origin HEAD:main
+
       - name: Tag and publish GitHub release
         if: steps.bump.outputs.type != 'skip'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="${{ steps.version.outputs.tag }}"
+
+          # Pull the latest changes (including the CHANGELOG commit)
+          git pull origin main
+
+          # Create and push the tag
           git tag "$TAG"
           git push origin "$TAG"
+
+          # Create the GitHub release
           gh release create "$TAG" \
             --title "$TAG" \
-            --generate-notes \
+            --notes "See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details." \
             --latest

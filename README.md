@@ -10,7 +10,7 @@ All resource types share the same module call. Only declare the variables you ne
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   networks = {
@@ -26,7 +26,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   volumes = {
@@ -51,7 +51,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   images = {
@@ -73,7 +73,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   containers = {
@@ -103,7 +103,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   registry_images = {
@@ -130,7 +130,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   tags = {
@@ -151,7 +151,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   buildx_builders = {
@@ -169,7 +169,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   plugins = {
@@ -189,7 +189,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   configs = {
@@ -219,7 +219,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   secrets = {
@@ -243,7 +243,7 @@ module "docker" {
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   services = {
@@ -280,7 +280,7 @@ A complete web application stack — network, volume, image pull, and two contai
 
 ```hcl
 module "docker" {
-  source  = "btougeiro/orchestrator/docker"
+  source  = "btougeiro/docker"
   version = "~> 1.0"
 
   networks = {
